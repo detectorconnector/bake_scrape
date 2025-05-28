@@ -9,7 +9,7 @@ def find_local_businesses(town, max_results=5):
 
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(search_url, headers=headers, timeout=10)
+        response = requests.get(search_url, headers=headers, timeout=10, verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         links = []
