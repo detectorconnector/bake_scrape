@@ -11,48 +11,49 @@
 
     <form method="post" class="mb-5">
       <div class="mb-3">
-        <label for="url" class="form-label">Prospect Website URL:</label>
-        <input type="url" id="url" name="url" class="form-control" placeholder="https://example.com" required>
+        <label for="url" class="form-label">Scrape a Specific Website:</label>
+        <input type="url" id="url" name="url" class="form-control" placeholder="https://example.com">
       </div>
+
+      <div class="mb-3">
+        <label for="town" class="form-label">Or Scan a Town:</label>
+        <input type="text" id="town" name="town" class="form-control" placeholder="Owatonna, MN">
+      </div>
+
       <button type="submit" class="btn btn-primary">Scrape & Analyze</button>
     </form>
 
-    {% if result %}
-      <div class="card mb-4">
-        <div class="card-header">
-          Scraped Content from {{ result.url }}
-        </div>
-        <div class="card-body">
-          <pre style="white-space: pre-wrap;">{{ result.scraped }}</pre>
-        </div>
-      </div>
+    {% if result.scraped %}
+      <h3>Scraped Content from {{ result.url }}</h3>
+      <pre style="white-space: pre-wrap;">{{ result.scraped }}</pre>
+      <h4>Ideas:</h4><p>{{ result.ideas }}</p>
+      <h4>Questions:</h4><p>{{ result.questions }}</p>
+      <h4>Opener:</h4><p>{{ result.opener }}</p>
+      <hr>
+    {% endif %}
 
-      <div class="card mb-3">
-        <div class="card-header">
-          AI-Generated Ideas
-        </div>
-        <div class="card-body">
-          <p>{{ result.ideas }}</p>
-        </div>
-      </div>
+    {% if result.batch %}
+      <h2>Live Batch Results (From Town Input)</h2>
+      {% for item in result.batch %}
+        <h4>{{ item.url }}</h4>
+        <pre>{{ item.scraped }}</pre>
+        <p><strong>Ideas:</strong> {{ item.ideas }}</p>
+        <p><strong>Questions:</strong> {{ item.questions }}</p>
+        <p><strong>Opener:</strong> {{ item.opener }}</p>
+        <hr>
+      {% endfor %}
+    {% endif %}
 
-      <div class="card mb-3">
-        <div class="card-header">
-          Smart Questions to Ask
-        </div>
-        <div class="card-body">
-          <p>{{ result.questions }}</p>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          Outreach Opener
-        </div>
-        <div class="card-body">
-          <p>{{ result.opener }}</p>
-        </div>
-      </div>
+    {% if result.overnight %}
+      <h2>Overnight Batch Report</h2>
+      {% for item in result.overnight %}
+        <h4>{{ item.url }}</h4>
+        <pre>{{ item.scraped }}</pre>
+        <p><strong>Ideas:</strong> {{ item.ideas }}</p>
+        <p><strong>Questions:</strong> {{ item.questions }}</p>
+        <p><strong>Opener:</strong> {{ item.opener }}</p>
+        <hr>
+      {% endfor %}
     {% endif %}
   </div>
 </body>
