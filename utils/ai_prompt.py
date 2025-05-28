@@ -1,7 +1,4 @@
-from openai import OpenAI
-import os
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import requests
 
 def generate_outreach(text):
     prompt = f"""
@@ -14,16 +11,19 @@ Generate:
 2. Three smart questions to ask in a meeting.
 3. A short cold email or LinkedIn opener.
 """
+
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7
+        response = requests.post(
+            'http://localhost:11434/api/generate',
+            json={
+                'model': 'mistral',
+                'prompt': prompt,
+                'stream': False
+            }
         )
-        reply = response.choices[0].message.content
-        parts = reply.split("\n")
+
+        reply = response.json().get('response', '')
+        parts = reply.split('\n')
 
         return {
             "ideas": "\n".join([p for p in parts if p.startswith("1.") or p.startswith("2.")]),
